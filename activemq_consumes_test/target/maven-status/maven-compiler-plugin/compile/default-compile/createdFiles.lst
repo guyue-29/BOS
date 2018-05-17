@@ -1,0 +1,4 @@
+com\itcast\caiwen\consumer\topic\TopicConsumer2.class
+com\itcast\caiwen\consumer\topic\TopicConsumer1.class
+com\itcast\caiwen\consumer\queue\QueueConsumer2.class
+com\itcast\caiwen\consumer\queue\QueueConsumer1.class

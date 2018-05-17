@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>对测试表的数据进行增、删、改、查的操作</title>
+		<!--复制 代码 时，一定要先检查你所导入 的文件的路径 是否正确。所有的路径 是不是是在webapp根目录下 -->
+		<script type="text/javascript" src="./js/jquery-1.8.3.js"></script>
+		<script type="text/javascript" src="./js/easyui/jquery.easyui.min.js"></script>
+		<script type="text/javascript" src="./js/easyui/locale/easyui-lang-zh_CN.js"></script>
+		<link rel="stylesheet" href="./js/easyui/themes/default/easyui.css" />
+		<link rel="stylesheet" href="./js/easyui/themes/icon.css" />
+		<script type="text/javascript">
+			$(function() { //界面加载完后，再加载JS
+				$.fn.serializeJson22 = function() {
+					var serializeObj = {};
+					var array = this.serializeArray();
+					var str = this.serialize();
+					$(array).each(function() {
+						if(serializeObj[this.name]) {
+							if($.isArray(serializeObj[this.name])) {
+								serializeObj[this.name].push(this.value);
+							} else {
+								serializeObj[this.name] = [serializeObj[this.name], this.value];
+							}
+						} else {
+							serializeObj[this.name] = this.value;
+						}
+					});
+					return serializeObj;
+				};
+
+				// 第二步：定义列
+				var columns = [
+					[{
+						field: 'id',
+						checkbox: true,
+					}, {
+						field: 'testName',
+						title: '测试名称',
+						width: 120,
+						align: 'center'
+					}, {
+						field: 'testAddress',
+						title: '测试地址',
+						width: 120,
+						align: 'center'
+					}, {
+						field: 'testAge',
+						title: '测试年龄',
+						width: 120,
+						align: 'center'
+					}, {
+						field: 'testSex',
+						title: '测试性别',
+						width: 120,
+						align: 'center',
+						formatter: function(value, row, index) {
+							if(row.testSex == "1") {
+								return "女";
+							} else {
+								return "男";
+							}
+						}
+					}]
+				];
+
+				//初始化Datagrid属性
+				//[{"id":"1","testName":"测试"},{},{},{},{},{},{}]
+				$("#grid").datagrid({
+					toolbar: [{
+						text: "修改",
+						iconCls: 'icon-edit',
+						handler: function() {
+							alert('修改')
+						}
+					}, '-', {
+						text: "新增",
+						iconCls: 'icon-add',
+						handler: function() {
+							$('#addWindow').window("open");
+						}
+					}, '-', {
+						text: "删除",
+						iconCls: 'icon-cancel',
+						handler: function() {
+							alert('删除')
+						}
+					}, '-', {
+						text: "查询",
+						iconCls: 'icon-search',
+						handler: function() {
+							$("#searchForm").form('clear');
+							$("#searchWindow").window('open');
+						}
+					}],
+					//路径 一定是要从webapp根目录开始请求
+					url: "./test_findall.action",
+					pagination: true,
+					pageList: [10, 30, 50],
+					columns: columns
+				});
+
+				//添加一个点击查询事件
+				// 为查询提交按钮 ，添加点击事件
+				$("#searchBtn").click(function() {
+					// 将查询表单内容转换为 json 
+					var params = $("#searchForm").serializeJson22();
+					// 绑定参数到datagrid
+					$("#grid").datagrid('load', params);
+					// 关闭查询窗口
+					$("#searchWindow").window('close');
+				});
+
+				// 对收派标准 save按钮，添加click事件
+				$("#save").click(function() {
+					// 判断是否form中所有表单对象 都是通过校验 
+					if($("#testForm").form('validate')) {
+						// 通过校验 
+						$("#testForm").submit();
+						$("#addWindow").window('close');
+					} else {
+						$.messager.alert("警告", "表单中还存在需要一些非法内容", "warning");
+					}
+				});
+			});
+		</script>
+	</head>
+
+	<body>
+		<!--
+        	作者：286129277@qq.com
+        	时间：2017-08-30
+        	描述：datagrid的使用
+        	
+        	1、添加一个Table标签，设置其ID及class样式 
+        	2、通过脚本 初始化datagrid的列、toolbar属性
+        	3、设置datagrid的url
+        -->
+		<table id="grid" class="easyui-datagrid"></table>
+
+		<!-- 查询测试数据-->
+		<div class="easyui-window" title="查询窗口" id="searchWindow" closed='true' collapsible="false" minimizable="false" maximizable="false" style="width: 400px; top:40px;left:200px">
+			<div style="overflow:auto;padding:5px;" border="false">
+				<form id="searchForm">
+					<table class="table-edit" width="80%" align="center">
+						<tr class="title">
+							<td colspan="2">查询条件</td>
+						</tr>
+						<tr>
+							<td>测试名称</td>
+							<td>
+								<input type="text" name="testName" />
+							</td>
+						</tr>
+						<tr>
+							<td>年龄</td>
+							<td>
+								<input type="text" name="testAge" />
+							</td>
+						</tr>
+						<tr>
+							<td colspan="2">
+								<a id="searchBtn" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-search'">查询</a>
+							</td>
+						</tr>
+					</table>
+				</form>
+			</div>
+		</div>
+
+		<div class="easyui-window" title="测试数据添加修改" closed="true" id="addWindow" collapsible="false" minimizable="false" maximizable="false" style="width: 400px;">
+			<div region="north" style="height:31px;overflow:hidden;" split="false" border="false">
+				<div class="datagrid-toolbar">
+					<a id="save" icon="icon-save" href="#" class="easyui-linkbutton" plain="true">保存</a>
+				</div>
+			</div>
+
+			<div region="center" style="overflow:auto;padding:5px;" border="false">
+				<form id="testForm" action="./test_save.action" method="post">
+					<table class="table-edit" width="80%" align="center">
+						<tr class="title">
+							<td colspan="2">测试数据信息</td>
+						</tr>
+						<tr>
+							<td>测试名称</td>
+							<td>
+								<input type="text" name="testName" class="easyui-validatebox" required="true" />
+							</td>
+						</tr>
+						<tr>
+							<td>测试地址</td>
+							<td>
+								<input type="text" name="testAddress" class="easyui-validatebox" required="true" />
+							</td>
+						</tr>
+						<tr>
+							<td>测试年龄 </td>
+							<td>
+								<input type="text" name="testAge" class="easyui-validatebox" required="true" />
+							</td>
+						</tr>
+					</table>
+				</form>
+			</div>
+		</div>
+	</body>
+
+</html>

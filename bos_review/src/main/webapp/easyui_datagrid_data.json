@@ -1,0 +1,30 @@
+[
+	{
+		"province": "湖北省",
+		"city": "武汉市",
+		"district": "洪山区",
+		"postcode": "123123",
+		"shortcode": "hbwh"
+	},
+	{
+		"province": "湖北省",
+		"city": "武汉市",
+		"district": "武昌区",
+		"postcode": "321312",
+		"shortcode": "hbwc"
+	},
+	{
+		"province": "湖北省",
+		"city": "襄阳市",
+		"district": "襄城区",
+		"postcode": "123123",
+		"shortcode": "hbxy"
+	},
+	{
+		"province": "湖北省",
+		"city": "襄阳市",
+		"district": "樊城区",
+		"postcode": "123123",
+		"shortcode": "hbxy"
+	}
+]

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="UTF-8">
+<title>布局练习</title>
+<script type="text/javascript" src="./js/jquery-1.8.3.js"></script>
+<script type="text/javascript" src="./js/easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript"
+	src="./js/easyui/locale/easyui-lang-zh_CN.js"></script>
+<link rel="stylesheet" href="./js/easyui/themes/default/easyui.css" />
+<link rel="stylesheet" href="./js/easyui/themes/icon.css" />
+<script type="text/javascript">
+	$(function() {
+		// 第一步：定义列（表头），编写时，要注意，它是一个二维的数组，即由两对中括号开头
+		var columns = [ [ {
+			//列字段绑定"id"主键值 的列，没有设置title属性，即为隐藏字段，目的是保存每一行信息的 主键，便于做修改操作或点击查看详情的操作			
+			field : 'id',
+			checkbox : true,//是否显示为复选框
+		}, {
+			field : 'province',
+			title : '省',//显示的列名
+			width : 120,
+			align : 'center'
+		}, {
+			field : 'city',
+			title : '市',
+			width : 120,
+			align : 'center'
+		}, {
+			field : 'district',
+			title : '区',
+			width : 120,
+			align : 'center'
+		}, {
+			field : 'postcode',
+			title : '邮编',
+			width : 120,
+			align : 'center'
+		}, {
+			field : 'shortcode',
+			title : '简码',
+			width : 120,
+			align : 'center',
+			fit : true
+		} ] ];
+
+		第二步：设置表格的工具栏（该 设置不是必须设置的，根据实际情况来决定）
+		var toolbar = [{
+			iconCls : 'icon-edit',//按钮要显示的图片（设置的图片名称是  icon.css中配置的样式名称是一一对应的）
+			text : '编辑按钮',//按钮名称 
+			handler : function() {//按钮点击后触发的事件
+				alert('edit')
+			}
+		}, '-', {
+			iconCls : 'icon-help',
+			text : '帮助按钮',
+			handler : function() {
+				alert('help')
+			}
+		}];
+		//第三步：初始化加载表格相关的参数值
+		$("#grid").datagrid({
+			toolbar : toolbar,
+			//用于异步查询数据的URL请求路径（这里可以直接返回一个JSON的数据或是查询后台返回数据
+			//（但一定要注意：必须是以服务器的路径来请求，如：http://localhost:9010/....）
+			url : './easyui_datagrid_data.json',
+			pagination : true,
+			pageList : [ 10, 30, 50 ],
+			columns : columns
+		});
+	});
+</script>
+</head>
+
+<body>
+	<table id="grid" class="easyui-datagrid"></table>
+</body>
+
+</html>
